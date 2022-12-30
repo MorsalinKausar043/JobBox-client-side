@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { toastSuccess, toastyWarning } from "../components/toastify/Toastify";
 
 export const Condition = () => {
-  const { email, isError, errorMassage } = useSelector((state) => state.user);
+  const { email, isError, errorMassage } = useSelector((state) => state.auth);
 
   useEffect(() => {
     

@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import auth from "./firebase/firebase.init";
-import { logOutUser, saveUser } from "./features/auth/authSlice";
+import {saveUser, toggleState } from "./features/auth/authSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -16,7 +16,7 @@ function App() {
         dispatch(saveUser(user.email));
         // ...
       } else {
-        dispatch(logOutUser());
+        dispatch(toggleState());
       }
     });
   }, [dispatch]);

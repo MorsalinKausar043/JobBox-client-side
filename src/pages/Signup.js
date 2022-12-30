@@ -3,7 +3,8 @@ import loginImage from "../assets/login.svg";
 import { useForm, useWatch } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { createUser } from "../features/auth/authSlice";
+import { createUser, singInGoogle } from "../features/auth/authSlice";
+import {FcGoogle} from "react-icons/fc"
 // import { Condition } from "../utils/Condition";
 const Signup = () => {
   const { handleSubmit, register, reset, control } = useForm();
@@ -94,6 +95,17 @@ const Signup = () => {
                     Login
                   </span>
                 </p>
+              </div>
+              <div className="!mt-8 ">
+                <button
+                  onClick={() => dispatch(singInGoogle())}
+                  className="flex justify-center items-center text-white py-3 rounded-full bg-primary w-full disabled:bg-gray-300 disabled:cursor-not-allowed"
+                >
+                  <span>
+                    <FcGoogle className="mr-2 text-2xl"/>
+                  </span>
+                  <span>SignUp in Google</span>
+                </button>
               </div>
             </div>
           </form>

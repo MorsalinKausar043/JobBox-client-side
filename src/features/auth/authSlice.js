@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithRedirect } from "firebase/auth";
 import auth from "../../firebase/firebase.init";
+
+const provider =new GoogleAuthProvider();
 
 const initialState = {
     isLoading: true,
@@ -18,6 +20,11 @@ export const createUser = createAsyncThunk("auth/createUser", async ({email,pass
 export const signInUser = createAsyncThunk("auth/singInUser", async ({email,password}) =>{
     const data = await signInWithEmailAndPassword(auth, email, password);
     return data.user.email;
+});
+
+export const singInGoogle = createAsyncThunk("auth/singInGoogle", async () =>{
+    const data = await signInWithRedirect(auth, provider);
+    return data.user.email;
 })
 
 const authSlice = createSlice({
@@ -26,9 +33,13 @@ const authSlice = createSlice({
     reducers: {
         saveUser : ( state,action) =>{
             state.email = action.payload;
+            state.isLoading = false;
         },
         logOutUser : ( state) =>{
             state.email = "";
+        },
+        toggleState : (state) =>{
+            state.isLoading = false;
         }
     },
     extraReducers: (builder) =>{
@@ -66,10 +77,27 @@ const authSlice = createSlice({
           state.errorMassage = action.error.message;
           state.email = "";
         });
+        builder.addCase(singInGoogle.pending, (state) =>{
+            state.isLoading = true;
+            state.isError = false;
+            state.errorMassage = "";
+        })
+        builder.addCase(singInGoogle.fulfilled, (state, action) => {
+          state.isLoading = false;
+          state.isError = false;
+          state.errorMassage = "";
+          state.email = action.payload;
+        });
+        builder.addCase(singInGoogle.rejected, (state, action) => {
+          state.isLoading = false;
+          state.isError = true;
+          state.errorMassage = action.error.message;
+          state.email = "";
+        });
     }
     
 });
 
-export const { saveUser, logOutUser } = authSlice.actions;
+export const { saveUser, logOutUser, toggleState } = authSlice.actions;
 
 export default authSlice.reducer;

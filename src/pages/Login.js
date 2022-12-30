@@ -1,10 +1,11 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { FcGoogle } from "react-icons/fc";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import loginImage from "../assets/login.svg";
-import { signInUser } from "../features/auth/authSlice";
-import { Condition } from "../utils/Condition";
+import { signInUser, singInGoogle } from "../features/auth/authSlice";
+// import { Condition } from "../utils/Condition";
 const Login = () => {
   const { register, handleSubmit } = useForm();
   const dispatch = useDispatch();
@@ -14,7 +15,7 @@ const Login = () => {
     dispatch(signInUser({ email, password }));
   };
 
-  Condition();
+  // Condition();
 
   return (
     <div className="flex h-screen items-center">
@@ -60,6 +61,17 @@ const Login = () => {
                     Sign up
                   </span>
                 </p>
+              </div>
+              <div className="!mt-8 ">
+                <button
+                  onClick={() => dispatch(singInGoogle())}
+                  className="flex justify-center items-center text-white py-3 rounded-full bg-primary w-full disabled:bg-gray-300 disabled:cursor-not-allowed"
+                >
+                  <span>
+                    <FcGoogle className="mr-2 text-2xl" />
+                  </span>
+                  <span>SignUp in Google</span>
+                </button>
               </div>
             </div>
           </form>
